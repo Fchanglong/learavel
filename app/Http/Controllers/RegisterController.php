@@ -43,6 +43,7 @@ class RegisterController extends Controller
         // registered() method or it returns null, redirect him to
         // some other URL. In our case, we just need to implement
         // that method to return the correct response.
+        // 最后这是我们想要的钩子。如果没有 registered() 方法或它返回 null，则将他重定向到其他某个 URL。在我们的例子中，我们只需要实现该方法来返回正确的响应。
         return $this->registered($request, $user)
             ?: redirect($this->redirectPath());
     }

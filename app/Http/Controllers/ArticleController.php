@@ -19,7 +19,7 @@ class ArticleController extends Controller
             'request' => 'false',
             'data'    => [],
             'code'    => '404',
-            'msg'     => '傳入參數驗證失敗',
+            'msg'     => '傳入參數驗證失敗123123',
             'type'     => 'error',
         ];
         // 按id查找数据库
