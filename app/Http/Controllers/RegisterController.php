@@ -90,39 +90,7 @@ class RegisterController extends Controller
         // return $this->registered($request, $user)
         //     ?: redirect($this->redirectPath());
     }
-    // 登录
-    public function login(Request $request)
-    {
-        // 参数 name password
-        // $all = $request->all();
-        // $data = [];
-        // $user = Auth::user();
-        // $data['token'] = $user->createToken('lpac')->accessToken();
-        // return ['msg' => '登录成功', 'data' => $data, 'code' => 2000];
-        // } else {
-        // $data['error'] = '账号或密码错误';
-        // return ['msg' => $data['error'], 'data' => $data, 'code' => 4000];
-        // if (Auth::attempt(['name' => $all['name'], 'password' => $all['password']])) {
-        //     $user = Auth::user();
-        //     return $this->success('登录成功', ['token' => $user->createToken('lpac')->accessToken]);
-        //     // return $user;
-        // } else {
-        //     return 2;
-        // };
-
-
-        $user = User::where('name', $request->name)->first();
-        if ($user && Hash::check($request->password, $user->password)) {
-            return  [
-                'msg' => '登录成功',
-                'data'=>['token' => $user->createToken('auth')->accessToken],
-             ];;
-        }
-        // 抛出异常
-        throw ValidationException::withMessages(['password' => '密码输入错误']);
-
-
-    }
+   
 
 
 }

@@ -6,6 +6,7 @@ use Faker\Core\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Auth\AuthenticationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -95,10 +96,15 @@ class Handler extends ExceptionHandler
                 'msg'     => $msg[$this->code],
             ];
             Log::log($this->levels[$this->code], 'Render Data', $result);
-            return response()->json($result,404);
+            return response()->json($result, 404);
         }
         return parent::render($request, $exception);
         // return response(end($classArray));
 
+    }
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        return response()->json(['error' => 'Unauthenticated.'], 401);
     }
 }

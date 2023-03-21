@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Article;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\TopsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -62,21 +65,93 @@ use App\Http\Controllers\RegisterController;
 
 //api
 $api = app('Dingo\Api\Routing\Router');
-$api->version('v1',['middleware' =>['cors']],function($api){
+// $api->version('v1', ['middleware' => 'api.auth'], function ($api) {
+//     // 在这个版本群组下的所有路由将进行身份验证。
+//     $api->get('articles/{id}',[ArticleController::class,'show']);
+// });
+$api->version('v1',function($api){
     // 需要登录验证的api
-    $api->group(['name'=>'App\Http\Controllers\Api','middlewaer'=>['auth:api','cors','throttle:300,1']],function($api){
+    // ,'throttle:300,1'
+    $api->group(['middleware' =>  'AuthMiddleware'],function($api){
         // $api->get('articles',[ArticleController::class,'index']);
+        $api->get('articles/{id}',[ArticleController::class,'show']);
     });
 
     // 不需要验证的api
-    $api->group(['name'=>'App\Http\Controllers\Api','middlewaer'=>['auth:api','cors','throttle:1200,1'],'limit'=>300,'expires'=>5],function($api){
-        $api->get('articles/{id}',[ArticleController::class,'show']);
+    $api->group(['middleware' => 'api'],function($api){
         $api->get('articles',[ArticleController::class,'index']);
         $api->post('articles',[ArticleController::class,'store']);
         $api->post('register',[RegisterController::class,'register']);
-        $api->post('login',[RegisterController::class,'login']);
+        $api->post('login',[LoginController::class,'login']);
+        $api->get('user',[UserController::class,'getUserInfo']);
+        $api->get('tops',[TopsController::class,'index']);
+        $api->post('tops',[TopsController::class,'store']);
+
     });
+
 });
+
+
+
+
+
+// $api->group([
+//     'version' => 'v1',
+//     'middleware' => 'auth:api',
+// ], function (\Dingo\Api\Routing\Router $api) {
+//     $api->get('articles/{id}',[ArticleController::class,'show']);
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// $api->version('v1', ['middleware' => 'AuthMiddleware'], function ($api) {
+
+//     //需要Token认证的路由组
+//     $api->group(['prefix' => 'auth'], function ($api) {
+//         $api->get('articles/{id}',[ArticleController::class,'show']);
+//     });
+
+// });
+
 // $api->version('v1', function ($api) {
-//     $api->get('login',[RegisterController::class,'login']);
+
+//     //不需要Token认证的路​​由组
+//     $api->group(['prefix' => 'guest'], function ($api) {
+//         // $api->get('articles/{id}',[ArticleController::class,'show']);
+//         $api->post('login',[LoginController::class,'login']);
+//     });
+
+// });
+
+
+// $api->version('v1', function ($api){
+//     $api->get('articles/{id}',[ArticleController::class,'show']);
+// });
+
+// $api = app('Dingo\Api\Routing\Router');
+// $api->version('v1', ['middleware' => 'api:auth'], function ($api) {
+//     $api->get('articles/{id}',[ArticleController::class,'show']);
+//     $api->get('articles',[ArticleController::class,'index']);
 // });
