@@ -30,17 +30,21 @@ class TopsController extends Controller
      */
     public function store(Request $request, Tops $tops)
     {
+        $validated = $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+        ]);
+        // php artisan make:request StorePostRequest 自定义验证 吧Request改成StorePostRequest
         // 填写数据，规则在 StoreTopsRequest 定义，可填写字段在帖子模型中定义
-        // $tops->fill($request->input());
+        $tops->fill($request->input());
         // 使用当前登录的用户id
-        // $tops->user_id = Auth::id();
-        // $tops = Auth::user();
-        // $tops->save();
-        $user =  Auth::guard('admin')->user();
+        $tops->user_id = Auth::id();
+        $tops->save();
+        // $user =  Auth::user();
 // dd($user);
 
-        // return $this->success('发表成功', $tops);
-        return $user;
+        return ['msg'=>'发表成功', $tops];
+        // return $user;
     }
 
     /**

@@ -16,10 +16,11 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            $token = Auth::user()->createToken('access-token')->accessToken;
-            return response()->json(['token' => $token]);
+            $token = Auth::user()->createToken('auth')->plainTextToken;
+            return response()->json(['token' => $token, 'id' => Auth::id()]);
         }
 
         return response()->json(['message' => 'Invalid login credentials'], 401);
     }
+
 }

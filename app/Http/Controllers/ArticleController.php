@@ -3,14 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\ArticleCollection;
 use App\Models\Article;
+use Illuminate\Support\Facades\Auth;
+
 class ArticleController extends Controller
 {
     //
+    // public function __construct()
+    // {
+    //     // 排除获取帖子列表和获取帖子详情
+    //     $this->middleware('auth:sanctum')->except(['index']);
+    // }
     public function index()
     {
         //  查询所有
-        return Article::all();
+        // return ['userid'=>Auth::user()];
+        // return new ArticleCollection(Article::paginate(4));
+        return Article::paginate()->total();
     }
 
     public function show($id)
@@ -33,7 +43,7 @@ class ArticleController extends Controller
 
             return response($result,404);
         }else{
-            return Article::find($id);
+            return [Article::find($id),'userid'=>Auth::user()];
         }
     }
 

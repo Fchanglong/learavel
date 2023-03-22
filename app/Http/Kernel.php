@@ -38,6 +38,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Fruitcake\Cors\HandleCors::class,
+            // 退出登录
+            // \Illuminate\Session\Middleware\AuthenticateSession::class,
         ],
 
         'api' => [
@@ -46,10 +48,10 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        'api:auth' => [
-            'auth:api',
-            'api.auth'
-         ]
+        // 'api:auth' => [
+        //     'auth:api',
+        //     'api.auth'
+        //  ]
 
     ];
 
@@ -71,6 +73,5 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'cors' => \Fruitcake\Cors\HandleCors::class,
-        'AuthMiddleware' => \App\Http\Middleware\AuthMiddleware::class,
     ];
 }
