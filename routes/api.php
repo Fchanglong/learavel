@@ -74,33 +74,37 @@ $api = app('Dingo\Api\Routing\Router');
 //     // 在这个版本群组下的所有路由将进行身份验证。
 //     $api->get('articles/{id}',[ArticleController::class,'show']);
 // });
-$api->version('v1',function($api){
-    // 需要登录验证的api
-    // ,'throttle:300,1'
-    $api->group(['middleware' =>  'auth:sanctum'],function($api){
-        // $api->get('articles',[ArticleController::class,'index']);
-        $api->get('articles/{id}',[ArticleController::class,'show']);
-        $api->post('tops',[TopsController::class,'store']);
-        $api->post('logout',[LogoutController::class,'logout']);
-
+$api->version('v1', function ($api) {
+    // tops
+    $api->group(['middleware' =>  'auth:sanctum', 'prefix' => 'tops'], function ($api) {
+        $api->post('tops', [TopsController::class, 'store']);
+        $api->get('show', [TopsController::class, 'show']);
+        $api->post('update/{id}', [TopsController::class, 'update']);
+        $api->delete('delete/{id}', [TopsController::class, 'destroy']);
+    });
+    $api->group(['middleware' => 'api', 'prefix' => 'tops'], function ($api) {
+        $api->get('tops', [TopsController::class, 'index']);
     });
 
-    // 不需要验证的api
-    $api->group(['middleware' => 'api'],function($api){
-        // articles
-        $api->get('articles',[ArticleController::class,'index']);
-        $api->post('articles',[ArticleController::class,'store']);
-
-        
-        $api->post('register',[RegisterController::class,'register']);
-        $api->post('login',[LoginController::class,'login']);
-
-
-        $api->get('tops',[TopsController::class,'index']);
-
-
+    // articles
+    $api->group(['middleware' =>  'auth:sanctum', 'prefix' => 'articles'], function ($api) {
+        $api->get('articles/{id}', [ArticleController::class, 'show']);
+    });
+    $api->group(['middleware' => 'api','prefix' => 'articles'], function ($api) {
+        $api->get('articles', [ArticleController::class, 'index']);
+        $api->post('articles', [ArticleController::class, 'store']);
+        $api->post('update/{id}', [ArticleController::class, 'update']);
     });
 
+
+    // auth
+    $api->group(['middleware' =>  'auth:sanctum', 'prefix' => 'auth'], function ($api) {
+        $api->post('logout', [LogoutController::class, 'logout']);
+    });
+    $api->group(['middleware' =>  'api', 'prefix' => 'auth'], function ($api) {
+        $api->post('register', [RegisterController::class, 'register']);
+        $api->post('login', [LoginController::class, 'login']);
+    });
 });
 
 

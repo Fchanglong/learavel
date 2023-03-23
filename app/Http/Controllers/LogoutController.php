@@ -11,11 +11,11 @@ class LogoutController extends Controller
     //
     public function logout(Request $request){
         // $request->user()->currentAccessToken()->delete();
-        $response = ['status' => 'success'];
         // return response($response, 201);
 
         $tokenId =$request->user()->currentAccessToken()->tokenable_id;
         $request->user()->tokens()->where('tokenable_id', $tokenId)->delete();
+        $response = ['status' => 'success'];
         return response($response, 201);
 
     }

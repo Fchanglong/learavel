@@ -72,7 +72,7 @@ class ArticleController extends Controller
 
         // 按id 更新数据
         $article = Article::findOrFail($id);
-        $article->update($request->all());
+        $article->update($request->input());
 
         return $article;
     }
